@@ -54,6 +54,7 @@ public class NoteListActivity extends AppCompatActivity {
 
               NoteInfo note=(NoteInfo) ListNotes.getItemAtPosition(position);
 
+              intent.putExtra(NoteActivity.NOTE_INFO, note);
                 startActivity(intent);
             }
         });

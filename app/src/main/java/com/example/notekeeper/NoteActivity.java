@@ -1,5 +1,6 @@
 package com.example.notekeeper;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -13,11 +14,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
+    public static  final String NOTE_INFO ="com.example.notekeeper.NOTE_INFO";
+    private NoteInfo mNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,9 +40,17 @@ public class NoteActivity extends AppCompatActivity {
 
         spinnerCourses.setAdapter(adaptarCourses);
 
+         readDisplayStateValue(); //External Methord
 
+        //References to Edit Text on the note
+        EditText textNoteTitle = findViewById(R.id.text_note_title);
+        EditText textNoteText = findViewById(R.id.text_note_text);
 
+    }
 
+    private void readDisplayStateValue(){
+        Intent intent = getIntent();
+        mNote = intent.getParcelableExtra(NOTE_INFO);
     }
 
     @Override

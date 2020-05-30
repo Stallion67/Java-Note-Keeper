@@ -1,0 +1,37 @@
+Note Keeper 
+--------------------
+
+-display list of notes
+-Edit existing notes
+-create new notes
+_________________________
+
+Content:
+NOTE
+- Course
+  >Name of a course
+  >Musst correspond to an actual course
+
+-Note Title
+ >User entered value to identify note
+
+-Note Text
+ >user entered Value that serves as the content of the note
+
+......
+card style list
+navigation drawer
+
+track completed modules
+Brandinf -based UI
+Device Language adaptability
+
+support user accesibility needs
+User customizable behaviors
+
+>> Use SQL lite to store ans access out dats
+>>make not data avalable to tothe apps
+Display reminder notification
+read save data in background
+>>
+-----

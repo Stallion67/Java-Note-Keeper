@@ -46,6 +46,20 @@ public class NoteActivity extends AppCompatActivity {
         EditText textNoteTitle = findViewById(R.id.text_note_title);
         EditText textNoteText = findViewById(R.id.text_note_text);
 
+        //External Methord to refernce spinner ans edit tex
+        displayNote(spinnerCourses, textNoteTitle, textNoteText);
+
+    }
+
+    private void displayNote(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
+       //getting list of courses from data manger
+        List<CourseInfo> courses =DataManager.getInstance().getCourses();
+        int courseIndex =courses.indexOf(mNote.getmCourse()); // determinning index of course
+        spinnerCourses.setSelection(courseIndex); //setting spinner
+        
+        //seting each of member Values
+        textNoteTitle.setText(mNote.getTitle());
+        textNoteText.setText(mNote.getText());
     }
 
     private void readDisplayStateValue(){

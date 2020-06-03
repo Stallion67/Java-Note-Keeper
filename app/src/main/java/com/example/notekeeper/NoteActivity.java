@@ -3,16 +3,11 @@ package com.example.notekeeper;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -20,8 +15,12 @@ import android.widget.Spinner;
 import java.util.List;
 
 public class NoteActivity extends AppCompatActivity {
-    public static  final String NOTE_INFO ="com.example.notekeeper.NOTE_INFO";
+    public static  final String NOTE_POSITION ="com.example.notekeeper.NOTE_POSITION";
+    public static final int POSITION_NOT_SET = -1;
     private NoteInfo mNote;
+    private Spinner mSpinnerCourses;
+    private EditText mTextNoteTitle;
+    private EditText mTextNoteText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +29,7 @@ public class NoteActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Spinner spinnerCourses = findViewById(R.id.spinner_courses);
+        mSpinnerCourses = findViewById(R.id.spinner_courses);
 
         //importing  courses
         List<CourseInfo> courses= DataManager.getInstance().getCourses();
@@ -38,16 +37,17 @@ public class NoteActivity extends AppCompatActivity {
 
         adaptarCourses.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
-        spinnerCourses.setAdapter(adaptarCourses);
+        mSpinnerCourses.setAdapter(adaptarCourses);
+
 
          readDisplayStateValue(); //External Methord
 
         //References to Edit Text on the note
-        EditText textNoteTitle = findViewById(R.id.text_note_title);
-        EditText textNoteText = findViewById(R.id.text_note_text);
+        mTextNoteTitle = findViewById(R.id.text_note_title);
+        mTextNoteText = findViewById(R.id.text_note_text);
 
         //External Methord to refernce spinner ans edit tex
-        displayNote(spinnerCourses, textNoteTitle, textNoteText);
+        displayNote(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
 
     }
 
@@ -56,7 +56,6 @@ public class NoteActivity extends AppCompatActivity {
         List<CourseInfo> courses =DataManager.getInstance().getCourses();
         int courseIndex =courses.indexOf(mNote.getmCourse()); // determinning index of course
         spinnerCourses.setSelection(courseIndex); //setting spinner
-        
         //seting each of member Values
         textNoteTitle.setText(mNote.getTitle());
         textNoteText.setText(mNote.getText());
@@ -64,7 +63,11 @@ public class NoteActivity extends AppCompatActivity {
 
     private void readDisplayStateValue(){
         Intent intent = getIntent();
-        mNote = intent.getParcelableExtra(NOTE_INFO);
+//        mNote = intent.getParcelableExtra(NOTE_POSITION);// Line of codee modified to below
+       int  position = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
+//       mIsNewNote=position ==POSITION_NOT_SET;
+//        if(!mIsNewNote)
+//            mNote =DataManager.getInstance().getNotes().get(position);
     }
 
     @Override
@@ -82,10 +85,24 @@ public class NoteActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_send_mail) {
+            SendEmail();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void SendEmail() {
+        CourseInfo course =(CourseInfo) mSpinnerCourses.getSelectedItem();
+        String subject = mTextNoteTitle.getText().toString();
+        String  text = "Checkout what I learned in the Pluralsight course \""+ course.getTitle()+"\"\n" + mTextNoteText.getText();
+        Intent intent= new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfr2022");
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject);
+        intent.putExtra(Intent.EXTRA_TEXT, text);
+
+        startActivity(intent);
+
     }
 }

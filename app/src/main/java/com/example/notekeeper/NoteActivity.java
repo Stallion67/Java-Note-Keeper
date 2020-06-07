@@ -51,6 +51,20 @@ public class NoteActivity extends AppCompatActivity {
 
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        saveNote();
+    }
+
+    private void saveNote() { //This class takes wales fro fields onthe screen and passes them on
+             mNote.setCourse((CourseInfo) mSpinnerCourses.getSelectedItem());
+             // getiing selecting item
+            mNote.setTitle(mTextNoteTitle.getText().toString());
+            mNote.setText(mTextNoteText.getText().toString());
+    }
+
     private void displayNote(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
        //getting list of courses from data manger
         List<CourseInfo> courses =DataManager.getInstance().getCourses();

@@ -82,6 +82,21 @@ public class NoteActivity extends AppCompatActivity {
 //       mIsNewNote=position ==POSITION_NOT_SET;
 //        if(!mIsNewNote)
 //            mNote =DataManager.getInstance().getNotes().get(position);
+
+        if (mIsNewNote){
+            createNewNote();
+        }
+        else {
+            mNote =DataManager.getInstance().getNotes().get(position);
+
+        }
+
+    }
+
+    private void createNewNote() {
+        DataManager dm = DataManager.getInstance();
+        mNotePosition = dm.createNewNote();
+        mNote = dm.getNotes().get(mNotePostion); 
     }
 
     @Override

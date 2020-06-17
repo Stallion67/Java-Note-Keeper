@@ -5,40 +5,60 @@ import android.os.Parcelable;
 
 public final class ModuleInfo implements Parcelable {
     private final String mModuleId;
-    private final  String mTitle;
+    private final String mTitle;
     private boolean mIsComplete = false;
 
-    public ModuleInfo (String moduleId, String title){ this(moduleId, title, false); }
-    public ModuleInfo (String moduleId, String title, boolean isComplete){
-        mModuleId = moduleId;
-        mTitle=title;
-        mIsComplete=isComplete;
+    public ModuleInfo(String moduleId, String title) {
+        this(moduleId, title, false);
     }
-  private  ModuleInfo(Parcel source){
-        mModuleId= source.readString();
-        mTitle=source.readString();
-        mIsComplete=source.readByte()==1;
-  }
 
-    public static final Creator<ModuleInfo> CREATOR = new Creator<ModuleInfo>() {
-        @Override
-        public ModuleInfo createFromParcel(Parcel in) {
-            return new ModuleInfo(in);
-        }
+    public ModuleInfo(String moduleId, String title, boolean isComplete) {
+        mModuleId = moduleId;
+        mTitle = title;
+        mIsComplete = isComplete;
+    }
 
-        @Override
-        public ModuleInfo[] newArray(int size) {
-            return new ModuleInfo[size];
-        }
-    };
+    private ModuleInfo(Parcel source) {
+        mModuleId = source.readString();
+        mTitle = source.readString();
+        mIsComplete = source.readByte() == 1;
+    }
 
-    public String getmModuleId(){
+    public String getModuleId() {
         return mModuleId;
-  }
-  public String getmTitle(){
-        return mTitle;
-  }
+    }
 
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public boolean isComplete() {
+        return mIsComplete;
+    }
+
+    public void setComplete(boolean complete) {
+        mIsComplete = complete;
+    }
+
+    @Override
+    public String toString() {
+        return mTitle;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ModuleInfo that = (ModuleInfo) o;
+
+        return mModuleId.equals(that.mModuleId);
+    }
+
+    @Override
+    public int hashCode() {
+        return mModuleId.hashCode();
+    }
 
     @Override
     public int describeContents() {
@@ -49,6 +69,21 @@ public final class ModuleInfo implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(mModuleId);
         dest.writeString(mTitle);
-        dest.writeByte((byte) (mIsComplete ? 1 : 0));
+        dest.writeByte((byte)(mIsComplete ? 1 : 0));
     }
+
+    public static final Creator<ModuleInfo> CREATOR =
+            new Creator<ModuleInfo>() {
+
+                @Override
+                public ModuleInfo createFromParcel(Parcel source) {
+                    return new ModuleInfo(source);
+                }
+
+                @Override
+                public ModuleInfo[] newArray(int size) {
+                    return new ModuleInfo[size];
+                }
+            };
+
 }

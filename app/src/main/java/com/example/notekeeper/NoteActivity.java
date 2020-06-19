@@ -21,6 +21,9 @@ public class NoteActivity extends AppCompatActivity {
     private Spinner mSpinnerCourses;
     private EditText mTextNoteTitle;
     private EditText mTextNoteText;
+    private boolean mIsNewNote;
+    private int mNotePosition;
+    // private boolean mIsNewNote;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +44,21 @@ public class NoteActivity extends AppCompatActivity {
 
 
          readDisplayStateValue(); //External Methord
+         saveOriginalNoteValue(); // external Methord
 
         //References to Edit Text on the note
         mTextNoteTitle = findViewById(R.id.text_note_title);
         mTextNoteText = findViewById(R.id.text_note_text);
 
         //External Methord to refernce spinner ans edit tex
+        if(!mIsNewNote)
         displayNote(mSpinnerCourses, mTextNoteTitle, mTextNoteText);
+
+    }
+
+    private void saveOriginalNoteValue() {
+        if(mIsNewNote)
+            return;
 
     }
 
@@ -56,6 +67,7 @@ public class NoteActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         saveNote();
+
     }
 
     private void saveNote() { //This class takes wales fro fields onthe screen and passes them on
@@ -68,7 +80,7 @@ public class NoteActivity extends AppCompatActivity {
     private void displayNote(Spinner spinnerCourses, EditText textNoteTitle, EditText textNoteText) {
        //getting list of courses from data manger
         List<CourseInfo> courses =DataManager.getInstance().getCourses();
-        int courseIndex =courses.indexOf(mNote.getmCourse()); // determinning index of course
+        int courseIndex =courses.indexOf(mNote.getCourse()); // determinning index of course
         spinnerCourses.setSelection(courseIndex); //setting spinner
         //seting each of member Values
         textNoteTitle.setText(mNote.getTitle());
@@ -77,9 +89,10 @@ public class NoteActivity extends AppCompatActivity {
 
     private void readDisplayStateValue(){
         Intent intent = getIntent();
-//        mNote = intent.getParcelableExtra(NOTE_POSITION);// Line of codee modified to below
+//       mNote = intent.getParcelableExtra(NOTE_POSITION);// Line of codee modified to below
        int  position = intent.getIntExtra(NOTE_POSITION, POSITION_NOT_SET);
-//       mIsNewNote=position ==POSITION_NOT_SET;
+        //mIsNewNote = mNote==null;
+      mIsNewNote=position ==POSITION_NOT_SET;
 //        if(!mIsNewNote)
 //            mNote =DataManager.getInstance().getNotes().get(position);
 
@@ -96,7 +109,7 @@ public class NoteActivity extends AppCompatActivity {
     private void createNewNote() {
         DataManager dm = DataManager.getInstance();
         mNotePosition = dm.createNewNote();
-        mNote = dm.getNotes().get(mNotePostion); 
+        mNote = dm.getNotes().get(mNotePosition);
     }
 
     @Override

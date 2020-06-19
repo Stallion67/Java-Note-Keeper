@@ -18,6 +18,8 @@ import java.util.List;
 
 public class NoteListActivity extends AppCompatActivity {
 
+    private ArrayAdapter<NoteInfo> mAdapterNotes;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +31,17 @@ public class NoteListActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+              //call to stat activity
+                startActivity(new Intent(NoteListActivity.this,NoteActivity.class));
             }
         });
 
         initializeDisplayContent();
+    }
+    @Override
+    protected void onResume(){
+        super.onResume();
+        mAdapterNotes.notifyDataSetChanged();
     }
 
     private void initializeDisplayContent() {
@@ -43,19 +50,16 @@ public class NoteListActivity extends AppCompatActivity {
         //Get contennt
         List<NoteInfo> notes = DataManager.getInstance().getNotes();
 
-        ArrayAdapter<NoteInfo> adapterNotes = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, notes);
+        mAdapterNotes = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, notes);
 
-        ListNotes.setAdapter(adapterNotes);//Populate List view with Notes
+        ListNotes.setAdapter(mAdapterNotes);//Populate List view with Notes
 
         ListNotes.setOnItemClickListener( new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent =new Intent(NoteListActivity.this, NoteActivity.class);
-
-//              NoteInfo note=(NoteInfo) ListNotes.getItemAtPosition(position); // commented at diffrerent Stage
-
-
-              intent.putExtra(NoteActivity.NOTE_POSITION,position);
+//                NoteInfo note=(NoteInfo) ListNotes.getItemAtPosition(position); // commented at diffrerent Stage
+                intent.putExtra(NoteActivity.NOTE_POSITION,position);
                 startActivity(intent);
             }
         });

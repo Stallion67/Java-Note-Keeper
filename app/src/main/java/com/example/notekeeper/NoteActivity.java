@@ -23,6 +23,7 @@ public class NoteActivity extends AppCompatActivity {
     private EditText mTextNoteText;
     private boolean mIsNewNote;
     private int mNotePosition;
+    private boolean mIsCancelling;
     // private boolean mIsNewNote;
 
     @Override
@@ -66,7 +67,13 @@ public class NoteActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        saveNote();
+        if (mIsCancelling){
+           //Removing the note thst was beeing created
+            if(mIsNewNote)
+            DataManager.getInstance().removeNote(mNotePosition);
+         }else{
+            saveNote();
+        }
 
     }
 
@@ -130,6 +137,10 @@ public class NoteActivity extends AppCompatActivity {
         if (id == R.id.action_send_mail) {
             SendEmail();
             return true;
+        } else if (id == R.id.action_Cancel){
+            mIsCancelling = true;
+            finish();//exit the activity
+
         }
 
         return super.onOptionsItemSelected(item);

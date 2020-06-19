@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MY Note Keeper</string>
     <string name="action_send">Send As Email</string>
+    <string name="action_Cancel">Cancel</string>
     <string name="title_activity_note_list">NoteListActivity</string>
     <string name="title_activity_note">Edit Note</string>
 </resources>
